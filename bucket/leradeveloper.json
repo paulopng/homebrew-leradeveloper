@@ -1,12 +1,12 @@
 {
-    "version": "0.5.1",
+    "version": "0.6.0",
     "description": "Browse, install and track AI agent personas for AI coding tools, in your browser.",
     "homepage": "https://github.com/paulopng/leradeveloper",
     "license": "MIT",
     "depends": "main/nodejs-lts",
-    "url": "https://github.com/paulopng/leradeveloper/releases/download/v0.5.1/leradeveloper-0.5.1.zip",
-    "hash": "0f36a646d47262a0cee1d987e31c0c0effe9039f66cbef97a609543a922e7566",
-    "extract_dir": "leradeveloper-0.5.1",
+    "url": "https://github.com/paulopng/leradeveloper/releases/download/v0.6.0/leradeveloper-0.6.0.zip",
+    "hash": "a7c303c715ce026efca6d8282c450014b45a63e8164d1d6b90648bec844475e3",
+    "extract_dir": "leradeveloper-0.6.0",
     "bin": [
         [
             "bin\\leradeveloper.cmd",
