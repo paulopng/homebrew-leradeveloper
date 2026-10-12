@@ -22,7 +22,7 @@ jobs:
       - name: scoop install leradeveloper
         shell: pwsh
         run: |
-          scoop bucket add leradeveloper $Env:GITHUB_WORKSPACE
+          scoop bucket add leradeveloper https://github.com/paulopng/homebrew-leradeveloper
           $out = scoop install leradeveloper *>&1 | Out-String
           Write-Output $out
           if (-not (Get-Command leradeveloper -ErrorAction SilentlyContinue)) {
