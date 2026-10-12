@@ -1,0 +1,59 @@
+name: Test install
+
+# Installs leradeveloper exactly like a user would, on Windows (Scoop) and
+# macOS/Linux (Homebrew), then starts it and fetches the UI.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  scoop:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install Scoop
+        shell: pwsh
+        run: |
+          Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+          iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
+          Join-Path (Resolve-Path ~).Path "scoop\shims" >> $Env:GITHUB_PATH
+      - name: scoop install leradeveloper
+        shell: pwsh
+        run: |
+          scoop bucket add leradeveloper $Env:GITHUB_WORKSPACE
+          scoop install leradeveloper
+          leradeveloper --version
+      - name: Start it and fetch the UI
+        shell: pwsh
+        run: |
+          Start-Process -FilePath "leradeveloper" -ArgumentList "--no-open","--port","4790" -WindowStyle Hidden
+          $ok = $false
+          for ($i = 0; $i -lt 30; $i++) {
+            try { $r = Invoke-WebRequest -UseBasicParsing http://127.0.0.1:4790/; if ($r.Content -match "<title>leradeveloper</title>") { $ok = $true; break } } catch {}
+            Start-Sleep 1
+          }
+          if (-not $ok) { throw "UI did not come up" }
+          "UI is up"
+
+  brew:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: Homebrew/actions/setup-homebrew@master
+      - name: brew install leradeveloper
+        run: |
+          mkdir -p "$(brew --repository)/Library/Taps/paulopng"
+          ln -s "$GITHUB_WORKSPACE" "$(brew --repository)/Library/Taps/paulopng/homebrew-leradeveloper"
+          brew install paulopng/leradeveloper/leradeveloper
+          brew test paulopng/leradeveloper/leradeveloper
+      - name: Start it and fetch the UI
+        run: |
+          leradeveloper --no-open --port 4790 &
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:4790/ | grep -q '<title>leradeveloper</title>' && exit 0; sleep 1; done
+          exit 1
