@@ -23,7 +23,13 @@ jobs:
         shell: pwsh
         run: |
           scoop bucket add leradeveloper $Env:GITHUB_WORKSPACE
-          scoop install leradeveloper
+          $out = scoop install leradeveloper *>&1 | Out-String
+          Write-Output $out
+          if (-not (Get-Command leradeveloper -ErrorAction SilentlyContinue)) {
+            $msg = $out -replace "%","%25" -replace "`r","" -replace "`n","%0A"
+            Write-Output "::error title=scoop install failed::$msg"
+            exit 1
+          }
           leradeveloper --version
       - name: Start it and fetch the UI
         shell: pwsh
@@ -45,9 +51,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v5
-      - uses: Homebrew/actions/setup-homebrew@master
       - name: brew install leradeveloper
         run: |
+          # Homebrew ships on both runner images; on Linux it isn't on PATH yet.
+          if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+            eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+            echo "/home/linuxbrew/.linuxbrew/bin" >> "$GITHUB_PATH"
+          fi
           mkdir -p "$(brew --repository)/Library/Taps/paulopng"
           ln -s "$GITHUB_WORKSPACE" "$(brew --repository)/Library/Taps/paulopng/homebrew-leradeveloper"
           brew install paulopng/leradeveloper/leradeveloper
