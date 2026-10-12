@@ -4,8 +4,8 @@
 class Leradeveloper < Formula
   desc "Browse, install and track AI agent personas for AI coding tools, in your browser"
   homepage "https://github.com/paulopng/leradeveloper"
-  url "https://github.com/paulopng/leradeveloper/releases/download/v0.2.0/leradeveloper-0.2.0.tar.gz"
-  sha256 "82845e7a01000c8cc93dce74b4c90c5086691b2ca1cb4c2b93dc19bc796cc78f"
+  url "https://github.com/paulopng/leradeveloper/releases/download/v0.3.0/leradeveloper-0.3.0.tar.gz"
+  sha256 "bacd9589b5cd334e8b60748946d0fad2b3c03078341ffe8895319fe2169c3a84"
   license "MIT"
 
   depends_on "node"
