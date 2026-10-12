@@ -4,8 +4,8 @@
 class Leradeveloper < Formula
   desc "Browse, install and track AI agent personas for AI coding tools, in your browser"
   homepage "https://github.com/paulopng/leradeveloper"
-  url "https://github.com/paulopng/leradeveloper/releases/download/v0.1.0/leradeveloper-0.1.0.tar.gz"
-  sha256 "da0e16411ce7a43362cbaca9048dae3de1a1baa8c7dfca94ca79f89dadc42eb8"
+  url "https://github.com/paulopng/leradeveloper/releases/download/v0.2.0/leradeveloper-0.2.0.tar.gz"
+  sha256 "82845e7a01000c8cc93dce74b4c90c5086691b2ca1cb4c2b93dc19bc796cc78f"
   license "MIT"
 
   depends_on "node"
@@ -15,6 +15,10 @@ class Leradeveloper < Formula
     (bin/"leradeveloper").write <<~SH
       #!/bin/bash
       exec "#{Formula["node"].opt_bin}/node" "#{libexec}/bin/leradeveloper.js" "$@"
+    SH
+    (bin/"lera-decisor").write <<~SH
+      #!/bin/bash
+      exec "#{Formula["node"].opt_bin}/node" "#{libexec}/bin/lera-decisor.js" "$@"
     SH
   end
 
