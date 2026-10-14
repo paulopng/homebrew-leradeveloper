@@ -4,8 +4,8 @@
 class Leradeveloper < Formula
   desc "Browse, install and track AI agent personas for AI coding tools, in your browser"
   homepage "https://github.com/paulopng/leradeveloper"
-  url "https://github.com/paulopng/leradeveloper/releases/download/v0.9.0/leradeveloper-0.9.0.tar.gz"
-  sha256 "939f43088c6856b33490e47aacc43008e70372e8714358482ddeb5581fbe6d0b"
+  url "https://github.com/paulopng/leradeveloper/releases/download/v0.10.1/leradeveloper-0.10.1.tar.gz"
+  sha256 "db1620268a6e7f740ba794f22578b39c90b0d160f931d49029d94890ee09d859"
   license "MIT"
 
   depends_on "node"
@@ -13,6 +13,10 @@ class Leradeveloper < Formula
   def install
     libexec.install Dir["*"]
     (bin/"leradeveloper").write <<~SH
+      #!/bin/bash
+      exec "#{Formula["node"].opt_bin}/node" "#{libexec}/bin/leradeveloper.js" "$@"
+    SH
+    (bin/"leradev").write <<~SH
       #!/bin/bash
       exec "#{Formula["node"].opt_bin}/node" "#{libexec}/bin/leradeveloper.js" "$@"
     SH
@@ -30,6 +34,6 @@ class Leradeveloper < Formula
   end
 
   test do
-    assert_match version.to_s, shell_output("#{bin}/leradeveloper --version")
+    assert_match version.to_s, shell_output("#{bin}/leradev --version")
   end
 end
