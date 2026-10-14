@@ -31,13 +31,14 @@ jobs:
             exit 1
           }
           leradeveloper --version
+          leradev --version
       - name: Start it and fetch the UI
         shell: pwsh
         run: |
           Start-Process -FilePath "leradeveloper" -ArgumentList "--no-open","--port","4790" -WindowStyle Hidden
           $ok = $false
           for ($i = 0; $i -lt 30; $i++) {
-            try { $r = Invoke-WebRequest -UseBasicParsing http://127.0.0.1:4790/; if ($r.Content -match "<title>leradeveloper</title>") { $ok = $true; break } } catch {}
+            try { $r = Invoke-WebRequest -UseBasicParsing http://127.0.0.1:4790/; if ($r.Content -match "<title>leradev</title>") { $ok = $true; break } } catch {}
             Start-Sleep 1
           }
           if (-not $ok) { throw "UI did not come up" }
@@ -65,5 +66,5 @@ jobs:
       - name: Start it and fetch the UI
         run: |
           leradeveloper --no-open --port 4790 &
-          for i in $(seq 1 30); do curl -sf http://127.0.0.1:4790/ | grep -q '<title>leradeveloper</title>' && exit 0; sleep 1; done
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:4790/ | grep -q '<title>leradev</title>' && exit 0; sleep 1; done
           exit 1
